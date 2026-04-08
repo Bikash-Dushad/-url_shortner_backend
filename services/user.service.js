@@ -69,7 +69,6 @@ const signinService = async (payload) => {
 
 const shortUrlService = async (payload) => {
   let { baseUrl, userId, longUrl, customName } = payload;
-
   const { error } = shortUrlValidation.validate(payload);
   if (error) {
     throw new Error(error.details[0].message);

@@ -5,6 +5,9 @@ const connectDB = require("./config/db");
 const PORT = process.env.PORT || 8000;
 dotenv.config();
 const routes = require("./routes");
+const cors = require("cors");
+
+app.use(cors());
 
 app.get("/health", async (req, res) => {
   res.send("Ok");
