@@ -42,6 +42,31 @@ const signupService = async (payload) => {
   return token;
 };
 
+const signinService = async (payload) => {
+  const { email, password } = payload;
+  if (!email || !password) {
+    throw new Error("Email/password is required");
+  }
+  const user = await UserModel.findOne({
+    email,
+    isActive: true,
+    isDeleted: false,
+  });
+
+  if (!user) {
+    throw new Error("User not found. Please provide valid email");
+  }
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    throw new Error("Incorrect password");
+  }
+  const tokenPayload = {
+    id: user._id,
+  };
+  const token = createToken(tokenPayload);
+  return token;
+};
+
 const shortUrlService = async (payload) => {
   let { baseUrl, userId, longUrl, customName } = payload;
 
@@ -99,6 +124,7 @@ const decodeUrlService = async (shortUrl) => {
 
 module.exports = {
   signupService,
+  signinService,
   shortUrlService,
   decodeUrlService,
 };

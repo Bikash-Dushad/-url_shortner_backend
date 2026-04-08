@@ -2,6 +2,7 @@ const {
   shortUrlService,
   decodeUrlService,
   signupService,
+  signinService,
 } = require("../services/user.service");
 
 const signup = async (req, res) => {
@@ -11,6 +12,24 @@ const signup = async (req, res) => {
     return res.status(200).json({
       responseCode: 200,
       message: "Signup successfull",
+      data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      responseCode: 500,
+      message: "server error",
+      error: error.message,
+    });
+  }
+};
+
+const signin = async (req, res) => {
+  try {
+    const payload = req.body;
+    const data = await signinService(payload);
+    return res.status(200).json({
+      responseCode: 200,
+      message: "Signin successfull",
       data,
     });
   } catch (error) {
@@ -60,6 +79,7 @@ const decodeUrl = async (req, res) => {
 
 module.exports = {
   signup,
+  signin,
   shortUrl,
   decodeUrl,
 };
