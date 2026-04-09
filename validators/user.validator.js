@@ -37,6 +37,7 @@ const signupValidation = Joi.object({
         " Confirm Password must contain at least one uppercase letter, one number, and one special character",
       "any.required": "Confirm Password is required",
     }),
+  shortUrls: Joi.array().items(Joi.string()).optional().default([]),
 });
 
 const signinValidation = Joi.object({

@@ -9,7 +9,8 @@ const bcrypt = require("bcrypt");
 const { createToken } = require("../utils/token.handler");
 
 const signupService = async (payload) => {
-  const { name, email, profile, password, confirmPassword } = payload;
+  const { name, email, profile, password, confirmPassword, shortUrls } =
+    payload;
   const { error } = signupValidation.validate(payload);
   if (error) {
     throw new Error(error.details[0].message);
@@ -33,6 +34,19 @@ const signupService = async (payload) => {
     profile,
   });
   await newUser.save();
+
+  if (shortUrls.length > 0) {
+    await ShortUrlModel.updateMany(
+      {
+        shortUrl: { $in: shortUrls },
+        isActive: true,
+        isDeleted: false,
+      },
+      {
+        $set: { user: newUser._id },
+      },
+    );
+  }
 
   const tokenPayload = {
     id: newUser._id,
