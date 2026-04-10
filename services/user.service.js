@@ -114,7 +114,7 @@ const shortUrlService = async (payload) => {
   baseUrl = `/${shortUrl || nanoId}`;
   const data = {
     longUrl,
-    shortUrl: baseUrl,
+    shortUrl: newUrl.shortUrl,
   };
   return data;
 };
