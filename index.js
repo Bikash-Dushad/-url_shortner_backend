@@ -6,7 +6,8 @@ const PORT = process.env.PORT || 8000;
 dotenv.config();
 const routes = require("./routes");
 const cors = require("cors");
-
+const { authMiddleware } = require("./middleware/authMiddleware");
+const ShortUrlModel = require("./models/shortUrl.schema");
 app.use(cors());
 
 app.get("/health", async (req, res) => {

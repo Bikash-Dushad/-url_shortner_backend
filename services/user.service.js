@@ -135,9 +135,33 @@ const decodeUrlService = async (shortUrl) => {
   return longUrl;
 };
 
+const myUrlsService = async (userId) => {
+  const findUrls = await ShortUrlModel.find({
+    user: userId,
+    isActive: true,
+    isDeleted: false,
+  })
+    .select("user shortUrl createdAt")
+    .sort({ createdAt: -1 });
+  return findUrls;
+};
+
+const myProfileService = async (userId) => {
+  if (!userId) {
+    throw new Error("UserId is required");
+  }
+  const user = await UserModel.findById(userId).select("-password");
+  if (!user) {
+    throw new Error("user not found");
+  }
+  return user;
+};
+
 module.exports = {
   signupService,
   signinService,
   shortUrlService,
   decodeUrlService,
+  myUrlsService,
+  myProfileService,
 };

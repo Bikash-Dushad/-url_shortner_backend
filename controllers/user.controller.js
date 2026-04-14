@@ -3,6 +3,8 @@ const {
   decodeUrlService,
   signupService,
   signinService,
+  myUrlsService,
+  myProfileService,
 } = require("../services/user.service");
 
 const signup = async (req, res) => {
@@ -55,6 +57,7 @@ const shortUrl = async (req, res) => {
       data,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       responseCode: 500,
       message: "Server error",
@@ -77,9 +80,49 @@ const decodeUrl = async (req, res) => {
   }
 };
 
+const myUrls = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+    const data = await myUrlsService(userId);
+    return res.status(200).json({
+      responseCode: 200,
+      message: "Urls fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      responseCode: 500,
+      message: "Server error",
+      error: error,
+    });
+  }
+};
+
+const myProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const data = await myProfileService(userId);
+    return res.status(200).json({
+      responseCode: 200,
+      message: "Profile fetched successfully",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      responseCode: 500,
+      message: "Server error",
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   signup,
   signin,
   shortUrl,
   decodeUrl,
+  myUrls,
+  myProfile,
 };
