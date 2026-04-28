@@ -57,7 +57,7 @@ const signupService = async (payload) => {
 };
 
 const signinService = async (payload) => {
-  const { email, password } = payload;
+  const { email, password, shortUrls } = payload;
   if (!email || !password) {
     throw new Error("Email/password is required");
   }
@@ -74,6 +74,20 @@ const signinService = async (payload) => {
   if (!isPasswordValid) {
     throw new Error("Incorrect password");
   }
+
+  if (shortUrls.length > 0) {
+    await ShortUrlModel.updateMany(
+      {
+        shortUrl: { $in: shortUrls },
+        isActive: true,
+        isDeleted: false,
+      },
+      {
+        $set: { user: user._id },
+      },
+    );
+  }
+
   const tokenPayload = {
     id: user._id,
   };
